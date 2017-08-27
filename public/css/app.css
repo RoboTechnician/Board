@@ -1,0 +1,23 @@
+body {
+    padding: 8px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+hr {
+    height: 3px;
+    border: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.header {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+input, select, textarea {
+    outline: none;
+}

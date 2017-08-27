@@ -1,0 +1,13 @@
+<% layout('./layout/template') %>
+<% block('title', currentUser.username) %>
+
+<h1 class="page-header"><%=currentUser.username%></h1>
+<h2 id="date" class="sub-header">
+    <%=
+    currentUser.created.toLocaleString("ru", {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric'
+    })
+    %>
+</h2>

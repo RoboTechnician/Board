@@ -1,0 +1,22 @@
+.adminbar {
+    overflow: hidden;
+}
+
+.adminbar input[type="text"] {
+    width: 150px;
+    height: 25px;
+}
+
+.brand {
+    float: left;
+    font-size: 20px;
+}
+
+.navigation {
+    font-size: 16px;
+    float:right;
+}
+
+.navigation form {
+    display: inline-block;
+}

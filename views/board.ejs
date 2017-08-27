@@ -1,0 +1,6 @@
+<% layout('./layout/template') %>
+<% block('title', `/${board.shortName}/`) %>
+
+<h1 class="header"><a class="alt-link" href="/<%=board.shortName%>"><%= board.fullName %></a></h1>
+<div class="content"></div>
+<script src="/js/board.js"></script>

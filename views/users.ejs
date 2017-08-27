@@ -1,0 +1,41 @@
+<% layout('./layout/template') %>
+<% block('title', 'Search') %>
+<% block('localCss', '/css/mdlist.css') %>
+
+<div id="content"></div>
+<script>
+    let path = window.location.pathname + window.location.search;
+    $.ajax({
+        url: path,
+        method: 'POST',
+        complete: jqXHR => {
+            console.log(JSON.parse(jqXHR.responseText));
+            showUsers(JSON.parse(jqXHR.responseText));
+        }
+    })
+
+    function showUsers(users) {
+        let content = '';
+
+        for (let i = 0; i < users.length; i++) {
+            let id = users[i].id;
+            let username = users[i].username;
+            let date = new Date(users[i].created);
+            date =
+                date.getDate() + '.' +
+                date.getMonth() + '.' +
+                date.getFullYear();
+
+            content +=
+                '<div class="media md-list">\n' +
+                '    <img src="/img/14973674604580.jpg" class="pull-left media-object" style="width: 128px; height: 128px">\n' +
+                '    <div class="media-body post-text">\n' +
+                '        <h1 class="media-heading"><a href="/user/' + id + '">' + username + '</a></h1>\n' +
+                '        <h3>Registered since: ' + date + '</h3>\n' +
+                '    </div>\n' +
+                '</div>\n'
+        }
+
+        $('#content').append(content);
+    }
+</script>

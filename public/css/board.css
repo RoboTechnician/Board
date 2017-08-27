@@ -1,0 +1,86 @@
+.start {
+    text-align: center;
+}
+
+.post-form {
+    display: inline-block;
+    text-align: left;
+}
+
+.post-form input[name="submit"] {
+    margin: 2px 2px 2px 0;
+    width: 100px;
+}
+
+.post-form input[type="text"] {
+    width: 100%;
+}
+
+.post-form textarea {
+    width: 350px;
+    height: 100px;
+}
+
+.file-link input[type="text"] {
+    width: 200px;
+}
+
+.file-link input[type="submit"] {
+    margin-left: 5px;
+}
+
+.file-input {
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+    text-align: center;
+}
+
+.file-utils {
+    position: relative;
+    height: 16px;
+    float: none;
+    margin-top: -18px;
+    padding: 1px 0;
+    background-color: rgba(95, 95, 95, 0.49);;
+}
+
+.file-btn {
+    display: inline-block;
+    margin: 0 1px;
+    padding: 0 16px 16px 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.add {
+    background-image: url("/img/add.gif");
+}
+
+.delete {
+    background-image: url("/img/delete.img");
+}
+
+.file-input-tbl {
+    display: table;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-input-cl {
+    display: table-cell;
+    vertical-align: middle;
+    max-width: inherit;
+}
+
+.file-input-cl img {
+    max-width: 86px;
+    max-height: 86px;
+}
+
+.thread-buttons {
+    margin-left: 10px;
+    margin-bottom: 4px;
+}
