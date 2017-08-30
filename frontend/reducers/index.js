@@ -4,14 +4,15 @@ import posts from './posts';
 import path from './path';
 import form from './form';
 import timer from './timer';
-import clonePosts from './clones';
+import image from './image';
 
 const reducer = combineReducers({
     mainPage,
     path,
     posts,
     form,
-    timer
+    timer,
+    image
 });
 
 export default reducer;

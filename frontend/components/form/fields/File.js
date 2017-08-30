@@ -25,14 +25,7 @@ const File = ({file, utilsDisplay, inputFile, fileBtn, mouseEnter, mouseLeave, a
 );
 
 File.propTypes = {
-    file: (props, propName, componentName) => {
-        if (props[propName] !== null && props[propName].constructor.name !== 'File') {
-            return new Error(
-                'Invalid prop `' + propName + '` supplied to' +
-                ' `' + componentName + '`. Validation failed.'
-            );
-        }
-    },
+    file: PropTypes.object,
     utilsDisplay: PropTypes.string.isRequired,
     inputFile: PropTypes.func.isRequired,
     fileBtn: PropTypes.bool.isRequired,

@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
     return {
-        mainPage: state.mainPage
+        mainPage: state.mainPage,
+        fixedForm: state.form.view.place === 'fixed',
+        image: state.image.display
     }
 };
 

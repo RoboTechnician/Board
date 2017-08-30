@@ -1,7 +1,16 @@
 let defaultState = {
-    place: 'up',
-    display: 'none',
+    view: {
+        place: 'up',
+        display: 'none',
+        minWidth: 350,
+        minHeight: 100,
+        width: 350,
+        height: 100,
+        left: 0,
+        top: 0
+    },
     fields: {
+        currentPostReply: null,
         name: '',
         theme: '',
         text: '',
@@ -20,12 +29,76 @@ const form = (state = defaultState, action) => {
         case 'DISPLAY_FORM':
             return {
                 ...state,
-                place: action.place,
-                display: action.display
+                view: {
+                    ...state.view,
+                    place: action.place,
+                    display: action.display
+                }
+            };
+        case 'RENDER_FORM':
+            return {
+                ...state,
+                view: {
+                    ...state.view,
+                    width: action.width,
+                    height: action.height,
+                    left: action.left,
+                    top: action.top
+                }
+            };
+        case 'RESIZE_FORM':
+            return {
+                ...state,
+                view: {
+                    ...state.view,
+                    width: action.width,
+                    height: action.height
+                }
+            };
+        case 'DISPLAY_FIXED_FORM':
+            let text = state.fields.text + (!state.fields.text || /\n$/ig.test(state.fields.text) ? '' : '\n') + '>>' + action.id + '\n';
+            return {
+                view: {
+                    ...state.view,
+                    place: 'fixed',
+                    display: '',
+                },
+                fields: {
+                    ...state.fields,
+                    currentPostReply: action.id,
+                    text: text
+                }
+            };
+        case 'FIXED_FORM':
+            return {
+                ...state,
+                view: {
+                    ...state.view,
+                    left: action.left,
+                    top: action.top
+                }
+            };
+        case 'UNFIXED_FORM':
+            return {
+                ...state,
+                view: {
+                    ...state.view,
+                    place: 'up',
+                    display: 'none',
+                    left: action.left,
+                    top: action.top
+                }
             };
         case 'UPDATE_POSTS':
             if (action.clearForm) {
-                return defaultState;
+                return {
+                    fields: defaultState.fields,
+                    view: {
+                        ...state.view,
+                        place: 'up',
+                        display: 'none'
+                    }
+                };
             } else {
                 return state;
             }

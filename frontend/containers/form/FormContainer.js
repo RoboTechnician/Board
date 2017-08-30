@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
     return {
-        display: state.form.display,
+        display: state.form.view.display
     }
 };
 

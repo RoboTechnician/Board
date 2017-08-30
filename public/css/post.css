@@ -24,6 +24,16 @@
     color: inherit;
 }
 
+.glyphicon-play {
+    cursor: pointer;
+    background-color: gray;
+    font-size: 10px;
+    vertical-align: text-top;
+    color: white;
+    padding: 2px;
+    border-radius: 2px;
+}
+
 .post-number {
     margin-left: 5px;
     margin-right: 10px;
@@ -35,7 +45,8 @@
     display: block;
     margin: 15px;
     max-width: 220px;
-    max-height: 220px
+    max-height: 220px;
+    cursor: pointer;
 }
 
 .post-text {

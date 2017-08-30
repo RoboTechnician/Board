@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Info from './Info';
+import InfoContainer from '../../containers/posts/InfoContainer';
 import TextContainer from '../../containers/posts/TextContainer';
 import RepliesContainer from '../../containers/posts/RepliesContainer';
-import Replies from './Replies';
 
-const Post = ({post, status}) => {
+const Post = ({post, status, onFileClick, onFileDown}) => {
     let {board, id, name, theme, date, file, text, thread, parent, replies} = post;
     let postClass = thread ?
         {wrapper: 'op-post-wrapper', post: 'op-post'}
@@ -20,8 +19,8 @@ const Post = ({post, status}) => {
         <div id={id}>
             <div className={postClass.wrapper}>
                 <div className={postClass.post}>
-                    <Info theme={theme} name={name} date={date} id={id} link={postLink} status={status}/>
-                    {file && <img className="post-file" src={fileLink}/>}
+                    <InfoContainer theme={theme} name={name} date={date} id={id} link={postLink} status={status}/>
+                    {file && <img className="post-file" src={fileLink} onClick={onFileClick} onMouseDown={onFileDown}/>}
                     <TextContainer id={id} board={board} text={text}/>
                     <RepliesContainer replies={replies} link={threadLink}/>
                 </div>
@@ -44,9 +43,11 @@ Post.propTypes = {
             PropTypes.array
         ]).isRequired,
         thread: PropTypes.number.isRequired,
-        parent: PropTypes.number.isRequired,
+        parent: PropTypes.number,
         replies:  PropTypes.array
     }).isRequired,
+    onFileClick: PropTypes.func.isRequired,
+    onFileDown: PropTypes.func.isRequired
 };
 
 export default Post;

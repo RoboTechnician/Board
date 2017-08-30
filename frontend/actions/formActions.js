@@ -1,16 +1,4 @@
-export const setFormPlace = place => {
-    return {
-        type: 'SET_FORM_PLACE',
-        place
-    };
-};
-
-export const setFormDisplay = display => {
-    return {
-        type: 'SET_FORM_PLACE',
-        display
-    };
-};
+import store from '../store';
 
 export const displayForm = (place, display) => {
     return {
@@ -20,9 +8,45 @@ export const displayForm = (place, display) => {
     };
 };
 
-export const clearForm = () => {
+export const renderForm = ({width = store.getState().form.view.width, height = store.getState().form.view.height,
+                               left = store.getState().form.view.left, top = store.getState().form.view.top}) => {
     return {
-        type: 'CLEAR_FORM'
+        type: 'RENDER_FORM',
+        width,
+        height,
+        left,
+        top
+    };
+};
+
+export const resizeForm = (width = store.getState().form.view.width, height = store.getState().form.view.height) => {
+    return {
+        type: 'RESIZE_FORM',
+        width,
+        height
+    };
+};
+
+export const displayFixedForm = id => {
+    return {
+        type: 'DISPLAY_FIXED_FORM',
+        id
+    };
+};
+
+export const fixedForm = (left = store.getState().form.view.left, top = store.getState().form.view.top) => {
+    return {
+        type: 'FIXED_FORM',
+        left,
+        top
+    };
+};
+
+export const unFixedForm = (left = store.getState().form.view.left, top = store.getState().form.view.top) => {
+    return {
+        type: 'UNFIXED_FORM',
+        left,
+        top
     };
 };
 

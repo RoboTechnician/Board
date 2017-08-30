@@ -96,6 +96,7 @@ function setClone(origPost, targetLink, postsArea, posts) {
     $('.post-link', post).removeClass('active-link');
     $('.post-link', post).mouseenter(linkHandler(postsArea, posts));
     post.attr('id', `clone-${clonePosts.length + 1}-${origPost.id}`);
+    post.css('z-index', 4);
     post.addClass('clone');
     positClone(origPostElem, post, targetLink);
 

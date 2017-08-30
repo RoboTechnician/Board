@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Post from './Post';
+import PostContainer from '../../containers/posts/PostContainer';
 
 const Posts = ({posts, mainPage}) => (
     <div className="posts">
         {posts.map((post, i) => (
-            <Post key={post.id} post={post} status={mainPage ? null : (post.deleted ? 'deleted' : i + 1)}/>
+            <PostContainer key={post.id} post={post} status={mainPage ? null : (post.deleted ? 'deleted' : i + 1)}/>
         ))}
     </div>
 );
@@ -24,7 +24,7 @@ Posts.propTypes = {
                 PropTypes.array
             ]).isRequired,
             thread: PropTypes.number.isRequired,
-            parent: PropTypes.number.isRequired
+            parent: PropTypes.number
         }).isRequired
     ).isRequired,
     mainPage: PropTypes.bool.isRequired
