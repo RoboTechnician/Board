@@ -7,7 +7,9 @@ let defaultState = {
         width: 350,
         height: 100,
         left: 0,
-        top: 0
+        top: 0,
+        right: null,
+        bottom: null
     },
     fields: {
         currentPostReply: null,
@@ -43,7 +45,9 @@ const form = (state = defaultState, action) => {
                     width: action.width,
                     height: action.height,
                     left: action.left,
-                    top: action.top
+                    top: action.top,
+                    right: action.right,
+                    bottom: action.bottom
                 }
             };
         case 'RESIZE_FORM':

@@ -9,17 +9,20 @@ export const displayForm = (place, display) => {
 };
 
 export const renderForm = ({width = store.getState().form.view.width, height = store.getState().form.view.height,
-                               left = store.getState().form.view.left, top = store.getState().form.view.top}) => {
+                               left = store.getState().form.view.left, top = store.getState().form.view.top,
+                               right = store.getState().form.view.right, bottom = store.getState().form.view.bottom}) => {
     return {
         type: 'RENDER_FORM',
         width,
         height,
         left,
-        top
+        top,
+        right,
+        bottom
     };
 };
 
-export const resizeForm = (width = store.getState().form.view.width, height = store.getState().form.view.height) => {
+export const resizeForm = ({width = store.getState().form.view.width, height = store.getState().form.view.height}) => {
     return {
         type: 'RESIZE_FORM',
         width,

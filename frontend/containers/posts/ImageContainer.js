@@ -14,7 +14,6 @@ const mapStateToProps = state => {
     };
 };
 
-let mouseIsDown = false;
 const mapDispatchToProps = dispatch => {
     return {
         onMouseDown: e => {
@@ -24,7 +23,6 @@ const mapDispatchToProps = dispatch => {
             let left = store.getState().image.left;
             let top = store.getState().image.top;
             let close = true;
-            mouseIsDown = true;
             if (e.button !== 0)
                 close = false;
 
@@ -36,6 +34,8 @@ const mapDispatchToProps = dispatch => {
                 if (mouseCoords.x !== x || mouseCoords.y !== y)
                     close = false;
 
+                left = store.getState().image.left;
+                top = store.getState().image.top;
                 left += x - mouseCoords.x;
                 top += y - mouseCoords.y;
 
@@ -57,34 +57,34 @@ const mapDispatchToProps = dispatch => {
                     window.focus();
                 }
 
-                mouseIsDown = false;
                 if (close)
                     dispatch(hideImage());
-                else
-                    dispatch(moveImage(left, top));
             };
         },
         onWheel: e => {
             e.preventDefault();
-            //let image = e.target;
+
+            if (document.onmousemove)
+                document.onmousemove(e);
+
             let width = store.getState().image.width;
             let height = store.getState().image.height;
             let left = store.getState().image.left;
             let top = store.getState().image.top;
+
             let shiftX = e.pageX - pageXOffset - left;
             let shiftY = e.pageY - pageYOffset - top;
-            console.log(`ShiftX: ${shiftX}; ShiftY: ${shiftY}`);
 
             if (e.deltaY > 0) {
                 left += shiftX / 5;
                 top += shiftY / 5;
-                width = width * 4 / 5;
-                height = height * 4 / 5;
+                width *= 4 / 5;
+                height *= 4 / 5;
             } else {
                 left -= shiftX / 4;
                 top -= shiftY / 4;
-                width = width * 5 / 4;
-                height = height * 5 / 4;
+                width *= 5 / 4;
+                height *= 5 / 4;
             }
 
             if (width > height) {
@@ -94,10 +94,6 @@ const mapDispatchToProps = dispatch => {
             }
 
             dispatch(renderImage(width, height, left, top));
-        },
-        onKeyDown: e => {
-            if (e.keyCode === 27)
-                dispatch(hideImage());
         }
     }
 };

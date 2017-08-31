@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Image = ({link, left, top, width, height, onMouseDown, onWheel, onKeyDown}) => (
+const Image = ({link, left, top, width, height, onMouseDown, onWheel}) => (
     <img className="fixed-file" style={{
         left,
         top,
@@ -17,8 +17,7 @@ Image.propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     onMouseDown: PropTypes.func.isRequired,
-    onWheel: PropTypes.func.isRequired,
-    onKeyDown: PropTypes.func.isRequired
+    onWheel: PropTypes.func.isRequired
 };
 
 export default Image;

@@ -29,15 +29,12 @@ const mapDispatchToProps = dispatch => {
                 left: box.left + pageXOffset,
                 right: box.right + pageXOffset,
             };
-            if ((coords.right - e.pageX < 20 && coords.right - e.pageX >= 1) && (coords.bottom - e.pageY < 20 && coords.bottom - e.pageY >= 1)) {
+            if ((coords.right - e.pageX < 20 && coords.right - e.pageX >= 0) && (coords.bottom - e.pageY < 20 && coords.bottom - e.pageY >= 0)) {
                 e.preventDefault();
 
                 let mouseCoords = {x: e.pageX, y: e.pageY};
                 let elementSize = {width: store.getState().form.view.width, height: store.getState().form.view.height};
                 let minElementSize = {width: store.getState().form.view.minWidth, height: store.getState().form.view.minHeight};
-
-                element.style.width = elementSize.width + 'px';
-                element.style.height = elementSize.height + 'px';
 
                 document.onmousemove = e => {
                     e.preventDefault();
@@ -48,29 +45,31 @@ const mapDispatchToProps = dispatch => {
                     elementSize.width += (x - mouseCoords.x)*2;
                     elementSize.height += y - mouseCoords.y;
 
+                    let realWidth, realHeight;
                     if (elementSize.width <= minElementSize.width)
-                        element.style.width = minElementSize.width + 'px';
+                        realWidth = minElementSize.width;
                     else
-                        element.style.width = elementSize.width + 'px';
+                        realWidth = elementSize.width;
 
                     if (elementSize.height <= minElementSize.height)
-                        element.style.height = minElementSize.height + 'px';
+                        realHeight = minElementSize.height;
                     else
-                        element.style.height = elementSize.height + 'px';
+                        realHeight = elementSize.height;
 
                     mouseCoords.x = x;
                     mouseCoords.y = y;
+
+                    dispatch(resizeForm({
+                        width: realWidth,
+                        height: realHeight
+                    }))
                 };
 
                 document.onmouseup = e => {
                     e.preventDefault();
 
-                    elementSize.width = +element.style.width.slice(0, -2);
-                    elementSize.height = +element.style.height.slice(0, -2);
-
                     document.onmousemove = null;
                     document.onmouseup = null;
-                    dispatch(resizeForm(elementSize.width, elementSize.height));
                 };
             }
         }

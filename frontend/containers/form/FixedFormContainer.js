@@ -6,7 +6,9 @@ import store from '../../store';
 const mapStateToProps = state => {
     return {
         left: state.form.view.left,
-        top: state.form.view.top
+        top: state.form.view.top,
+        right: state.form.view.right,
+        bottom: state.form.view.bottom
     }
 };
 
@@ -50,23 +52,25 @@ function onMouseDown(dispatch) {
             left += x - mouseCoords.x;
             top += y - mouseCoords.y;
 
-
+            let realLeft, realTop;
             if (left <= 0)
-                element.style.left = '0px';
+                realLeft = 0;
             else if (left + elementSize.width >= windowSize.width)
-                element.style.left = windowSize.width - elementSize.width + 'px';
+                realLeft = windowSize.width - elementSize.width;
             else
-                element.style.left = left + 'px';
+                realLeft = left;
 
             if (top <= 0)
-                element.style.top = '0px';
+                realTop = 0;
             else if (top + elementSize.height >= windowSize.height)
-                element.style.top = windowSize.height - elementSize.height + 'px';
+                realTop = windowSize.height - elementSize.height;
             else
-                element.style.top = top + 'px';
+                realTop = top;
 
             mouseCoords.x = x;
             mouseCoords.y = y;
+
+            dispatch(fixedForm(realLeft, realTop));
         };
 
         document.onmouseup = e => {
@@ -85,13 +89,8 @@ function onMouseDown(dispatch) {
                 right: close.right + pageXOffset
             };
 
-            left = +element.style.left.slice(0, -2);
-            top = +element.style.top.slice(0, -2);
-
             if (coords.bottom >= y && coords.top <= y && coords.right >= x && coords.left <= x)
-                dispatch(unFixedForm(left, top));
-            else
-                dispatch(fixedForm(left, top));
+                dispatch(unFixedForm());
         };
     };
 }
@@ -106,11 +105,9 @@ function topDown(dispatch) {
         let minHeight = store.getState().form.view.minHeight;
         let form = e.target.closest('.fixed-form-container');
         let element = document.querySelector('#start-form .post-area');
-        let height = +element.style.height.slice(0, -2);
+        let height = store.getState().form.view.height;
 
         const bottom = windowSize.height - top - form.offsetHeight;
-        form.style.top = '';
-        form.style.bottom = bottom + 'px';
 
         document.onmousemove = e => {
             e.preventDefault();
@@ -119,12 +116,23 @@ function topDown(dispatch) {
             height += mouseY - y;
             element.style.height = height + 'px';
 
-            if (bottom + form.offsetHeight >= windowSize.height)
-                element.style.height = height - bottom - form.offsetHeight + windowSize.height + 'px';
-            else if (height <= minHeight)
-                element.style.height = minHeight + 'px';
+            let realHeight;
+            if (bottom + form.offsetHeight >= windowSize.height) {
+                realHeight = height - bottom - form.offsetHeight + windowSize.height;
+                element.style.height = realHeight +'px';
+            }
+            else if (height <= minHeight) {
+                realHeight = minHeight;
+                element.style.height = realHeight + 'px';
+            }
+            else
+                realHeight = height;
 
             mouseY = y;
+
+            dispatch(resizeForm({
+                height: realHeight
+            }));
         };
 
         document.onmouseup = e => {
@@ -132,14 +140,17 @@ function topDown(dispatch) {
 
             document.onmousemove = null;
             document.onmouseup = null;
-            form.style.bottom = '';
             top = windowSize.height - bottom - form.offsetHeight;
-            form.style.top = top + 'px';
             dispatch(renderForm({
                 top: top,
-                height: +element.style.height.slice(0, -2)
-            }));
+                bottom: null
+            }))
         };
+
+        dispatch(renderForm({
+            top: null,
+            bottom
+        }))
     };
 }
 
@@ -153,7 +164,7 @@ function bottomDown(dispatch) {
         let form = e.target.closest('.fixed-form-container');
         let windowSize = getWindowSize();
         let element = document.querySelector('#start-form .post-area');
-        let height = +element.style.height.slice(0, -2);
+        let height = store.getState().form.view.height;
 
         document.onmousemove = e => {
             e.preventDefault();
@@ -161,12 +172,23 @@ function bottomDown(dispatch) {
             let y = e.pageY;
             height += y - mouseY;
             element.style.height = height + 'px';
-            if (top + form.offsetHeight >= windowSize.height)
-                element.style.height = height - top - form.offsetHeight + windowSize.height + 'px';
-            else if (height <= minHeight)
-                element.style.height = minHeight + 'px';
+
+            let realHeight;
+            if (top + form.offsetHeight >= windowSize.height) {
+                realHeight = height - top - form.offsetHeight + windowSize.height;
+                element.style.height = realHeight + 'px';
+            }
+            else if (height <= minHeight) {
+                realHeight = minHeight;
+                element.style.height = realHeight + 'px';
+            } else
+                realHeight = height;
 
             mouseY = y;
+
+            dispatch(resizeForm({
+                height: realHeight
+            }))
         };
 
         document.onmouseup = e => {
@@ -174,7 +196,6 @@ function bottomDown(dispatch) {
 
             document.onmousemove = null;
             document.onmouseup = null;
-            dispatch(resizeForm(undefined, +element.style.height.slice(0, -2)));
         };
     }
 }
@@ -189,11 +210,9 @@ function leftDown(dispatch) {
         let minWidth = store.getState().form.view.minWidth;
         let form = e.target.closest('.fixed-form-container');
         let element = document.querySelector('#start-form .post-area');
-        let width = +element.style.width.slice(0, -2);
+        let width = store.getState().form.view.width;
 
         const right = windowSize.width - left - form.offsetWidth;
-        form.style.left = '';
-        form.style.right = right + 'px';
 
         document.onmousemove = e => {
             e.preventDefault();
@@ -202,12 +221,22 @@ function leftDown(dispatch) {
             width += mouseX - x;
             element.style.width = width + 'px';
 
-            if (right + form.offsetWidth >= windowSize.width)
-                element.style.width = width - right - form.offsetWidth + windowSize.width + 'px';
-            else if (width <= minWidth)
-                element.style.width = minWidth + 'px';
+            let realWidth;
+            if (right + form.offsetWidth >= windowSize.width) {
+                realWidth = width - right - form.offsetWidth + windowSize.width;
+                element.style.width = realWidth + 'px';
+            }
+            else if (width <= minWidth) {
+                realWidth = minWidth;
+                element.style.width = realWidth + 'px';
+            } else
+                realWidth = width;
 
             mouseX = x;
+
+            dispatch(resizeForm({
+                width: realWidth
+            }))
         };
 
         document.onmouseup = e => {
@@ -215,14 +244,17 @@ function leftDown(dispatch) {
 
             document.onmousemove = null;
             document.onmouseup = null;
-            form.style.right = '';
             left = windowSize.width - right - form.offsetWidth;
-            form.style.left = left + 'px';
             dispatch(renderForm({
                 left: left,
-                width: +element.style.width.slice(0, -2)
+                right: null
             }));
         };
+
+        dispatch(renderForm({
+            left: null,
+            right
+        }))
     }
 }
 
@@ -236,7 +268,7 @@ function rightDown(dispatch) {
         let form = e.target.closest('.fixed-form-container');
         let windowSize = getWindowSize();
         let element = document.querySelector('#start-form .post-area');
-        let width = +element.style.width.slice(0, -2);
+        let width = store.getState().form.view.width;
 
         document.onmousemove = e => {
             e.preventDefault();
@@ -244,12 +276,23 @@ function rightDown(dispatch) {
             let x = e.pageX;
             width += x - mouseX;
             element.style.width = width + 'px';
-            if (left + form.offsetWidth >= windowSize.width)
-                element.style.width = width - left - form.offsetWidth + windowSize.width + 'px';
-            else if (width <= minWidth)
-                element.style.width = minWidth + 'px';
+
+            let realWidth;
+            if (left + form.offsetWidth >= windowSize.width) {
+                realWidth = width - left - form.offsetWidth + windowSize.width;
+                element.style.width = realWidth + 'px';
+            }
+            else if (width <= minWidth) {
+                realWidth = minWidth;
+                element.style.width = realWidth + 'px';
+            } else
+                realWidth = width;
 
             mouseX = x;
+
+            dispatch(resizeForm({
+                width: realWidth
+            }))
         };
 
         document.onmouseup = e => {
@@ -257,7 +300,6 @@ function rightDown(dispatch) {
 
             document.onmousemove = null;
             document.onmouseup = null;
-            dispatch(resizeForm(+element.style.width.slice(0, -2)));
         };
     }
 }
