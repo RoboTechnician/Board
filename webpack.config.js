@@ -1,7 +1,6 @@
 module.exports = {
     entry: {
-        thread: './frontend/thread.js',
-        board: './frontend/board.js'
+        test: './tests/test1.tsx',
     },
     output: {
         path: __dirname + '/public/js',
@@ -10,16 +9,28 @@ module.exports = {
     },
     watch: true,
     devtool: 'source-map',
+    resolve: {
+        extensions: [".ts", ".tsx", ".js", ".json"]
+    },
     module: {
-        loaders: [
+        rules: [
+            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+        ]
+        /*loaders: [
             {
-                test: /\.js?$/,
+                test: /\.tsx?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
                     presets: ['es2015', 'react', 'stage-2']
                 }
+            },
+            {
+                test: /\.tsx?$/,
+                loader: "awesome-typescript-loader",
+                exclude: /node_modules/
             }
-        ]
+        ]*/
     }
 };
